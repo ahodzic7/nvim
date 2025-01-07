@@ -12,7 +12,7 @@ return {
         require("mason").setup()
         require("mason-lspconfig").setup({
             ensure_installed = {
-                "clangd",
+                "clangd", "cmake"
             },
             automatic_installation = true,
         })
@@ -24,7 +24,7 @@ return {
         local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
         lspconfig.clangd.setup({
-            cmd = { "clangd" }, -- Use clangd LSP
+            cmd = { "clangd" },
             filetypes = { "c", "cpp", "objc", "objcpp" }, -- Filetypes handled
             root_dir = lspconfig.util.root_pattern("compile_commands.json", "compile_flags.txt", ".git"),
             capabilities = capabilities, -- Autocompletion capabilities
