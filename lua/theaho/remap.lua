@@ -21,7 +21,7 @@ vim.keymap.set({"n", "v"}, "<leader>d", "\"_d")
 
 vim.keymap.set("n", "Q", "<nop>")
 -- I use this for harpoon registry
---vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
+vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
 
 -- I use C-k and C-j for harpoon
