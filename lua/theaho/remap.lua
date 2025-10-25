@@ -35,4 +35,4 @@ vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
 -- QOL for saving etc.
 vim.keymap.set('n', '<leader>w', ':w<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>q', ':q<CR>', { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>x', ':wq<CR>', { noremap = true, silent = true }
+vim.keymap.set('n', '<leader>x', ':wq<CR>', { noremap = true, silent = true })
