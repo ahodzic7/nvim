@@ -47,20 +47,11 @@ return {
             capabilities = capabilities,
             on_attach = on_attach,
             root_dir = lspconfig.util.root_pattern("*.sln", "*.csproj"),
-            cmd = { vim.fn.stdpath("data") .. "/mason/packages/omnisharp/OmniSharp", "-lsp" },
-        })
-
-        -- Autocompletion setup
-        local cmp = require("cmp")
-        cmp.setup({
-            mapping = cmp.mapping.preset.insert({
-                ["<C-Space>"] = cmp.mapping.complete(),
-                ["<CR>"] = cmp.mapping.confirm({ select = true }),
-            }),
-            sources = {
-                { name = "nvim_lsp" },
-                { name = "buffer" },
+            cmd = {
+                vim.fn.stdpath("data") .. "/mason/packages/omnisharp/OmniSharp",
+                "-lsp",
             },
         })
+
     end,
 }
