@@ -24,11 +24,11 @@ vim.keymap.set("n", "Q", "<nop>")
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
 
--- I use C-k and C-j for harpoon
---vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
---vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
---vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
---vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
+-- Quickfix and location list
+vim.keymap.set("n", "<leader>j", "<cmd>cnext<CR>zz")
+vim.keymap.set("n", "<leader>k", "<cmd>cprev<CR>zz")
+vim.keymap.set("n", "<leader>l", "<cmd>lnext<CR>zz")
+vim.keymap.set("n", "<leader>h", "<cmd>lprev<CR>zz")
 
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 
