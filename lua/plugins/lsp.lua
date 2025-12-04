@@ -51,6 +51,27 @@ return {
                 vim.fn.stdpath("data") .. "/mason/packages/omnisharp/OmniSharp",
                 "-lsp",
             },
+
+            enable_roslyn_analyzers = false,
+            organize_imports_on_format = true,
+            enable_import_completion = true,
+
+            settings = {
+                FormattingOptions = {
+                    EnableEditorConfigSupport = true,
+                    OrganizeImports = true,
+                },
+
+                MsBuild = {
+                    LoadProjectsOnDemand = true,
+                },
+
+                RoslynExtensionsOptions = {
+                    EnableAnalyzersSupport = false,
+                    EnableImportCompletion = true,
+                    EnableDecompilationSupport = true,
+                },
+            }
         })
 
     end,
