@@ -1,12 +1,11 @@
 return {
-    {
-        "github/copilot.vim",
-    },
     "hrsh7th/nvim-cmp",
     dependencies = {
+        "github/copilot.vim",
         "L3MON4D3/LuaSnip",
         "saadparwaiz1/cmp_luasnip",
         "hrsh7th/cmp-nvim-lsp",
+        "hrsh7th/cmp-buffer",
         "rafamadriz/friendly-snippets",
     },
 
