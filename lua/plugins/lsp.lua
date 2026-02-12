@@ -12,7 +12,7 @@ return {
         require("mason").setup()
         require("mason-lspconfig").setup({
             ensure_installed = {
-                "clangd", "cmake", "omnisharp"
+                "clangd", "cmake", "omnisharp", "pyright"
             },
             automatic_installation = true,
         })
@@ -72,6 +72,28 @@ return {
                     EnableDecompilationSupport = true,
                 },
             }
+        })
+
+        -- Python LSP setup (Pyright)
+        lspconfig.pyright.setup({
+            capabilities = capabilities,
+            on_attach = on_attach,
+            root_dir = lspconfig.util.root_pattern(
+            "pyproject.toml",
+            "setup.py",
+            "setup.cfg",
+            "requirements.txt",
+            ".git"
+            ),
+            settings = {
+                python = {
+                    analysis = {
+                        autoSearchPaths = true,
+                        useLibraryCodeForTypes = true,
+                        typeCheckingMode = "basic", -- "off", "basic", "strict"
+                    },
+                },
+            },
         })
 
     end,
