@@ -28,7 +28,7 @@ function ColorMyPencilsAll(color)
 
     -- Popup / menus
     "Pmenu",
-    "PmenuSel",
+    --"PmenuSel",
     "PmenuSbar",
     "PmenuThumb",
 
