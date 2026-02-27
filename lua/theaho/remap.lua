@@ -42,3 +42,12 @@ vim.keymap.set('n', '<C-Up>', ':resize +2<CR>')
 vim.keymap.set('n', '<C-Down>', ':resize -2<CR>')
 vim.keymap.set('n', '<C-Left>', ':vertical resize -2<CR>')
 vim.keymap.set('n', '<C-Right>', ':vertical resize +2<CR>')
+
+vim.api.nvim_create_user_command("FormatOnSaveToggle", function()
+    vim.b.disable_format_on_save = not vim.b.disable_format_on_save
+    if vim.b.disable_format_on_save then
+        print("Format on save: OFF")
+    else
+        print("Format on save: ON")
+    end
+end, {})

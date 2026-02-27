@@ -35,6 +35,9 @@ return {
                 vim.api.nvim_create_autocmd("BufWritePre", {
                     buffer = bufnr,
                     callback = function()
+                        if vim.b.disable_format_on_save then
+                            return
+                        end
                         vim.lsp.buf.format({
                             async = false,
                             bufnr = bufnr,
