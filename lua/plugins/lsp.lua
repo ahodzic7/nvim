@@ -29,6 +29,7 @@ return {
             keymap("n", "<leader>rn", vim.lsp.buf.rename, opts)
             keymap("n", "<leader>ca", vim.lsp.buf.code_action, opts)
             keymap("n", "<leader>gr", vim.lsp.buf.references, opts)
+            keymap("i", "<C-s>", function() vim.lsp.buf.signature_help() end, opts)
             keymap("n", "[d", vim.diagnostic.goto_prev, opts)
             keymap("n", "]d", vim.diagnostic.goto_next, opts)
             if client.server_capabilities.documentFormattingProvider then
