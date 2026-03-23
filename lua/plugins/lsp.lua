@@ -32,17 +32,6 @@ return {
             keymap("i", "<C-s>", function() vim.lsp.buf.signature_help() end, opts)
             keymap("n", "[d", vim.diagnostic.goto_prev, opts)
             keymap("n", "]d", vim.diagnostic.goto_next, opts)
-            if client.server_capabilities.documentFormattingProvider then
-                vim.api.nvim_create_autocmd("BufWritePre", {
-                    buffer = bufnr,
-                    callback = function()
-                        vim.lsp.buf.format({
-                            async = false,
-                            bufnr = bufnr,
-                        })
-                    end,
-                })
-            end
         end
 
         -- C++ LSP setup
