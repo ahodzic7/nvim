@@ -17,7 +17,7 @@ return {
 
     vim.keymap.set("n", "<leader>zz", function()
       require("zen-mode").toggle({
-        window = { width = 90 },
+        window = { width = 130 },
       })
 
       vim.wo.wrap = false
