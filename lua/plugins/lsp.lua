@@ -12,7 +12,7 @@ return {
         require("mason").setup()
         require("mason-lspconfig").setup({
             ensure_installed = {
-                "clangd", "cmake", "omnisharp", "pyright"
+                "clangd", "cmake", "omnisharp", "pyright", "rust_analyzer"
             },
             automatic_installation = true,
         })
@@ -96,6 +96,33 @@ return {
                         autoSearchPaths = true,
                         useLibraryCodeForTypes = true,
                         typeCheckingMode = "basic", -- "off", "basic", "strict"
+                    },
+                },
+            },
+        })
+
+        -- Rust LSP setup (rust-analyzer)
+        lspconfig.rust_analyzer.setup({
+            capabilities = capabilities,
+            on_attach = function(client, bufnr)
+                on_attach(client, bufnr)
+                if vim.lsp.inlay_hint then
+                    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+                end
+            end,
+            filetypes = { "rust" },
+            root_dir = lspconfig.util.root_pattern("Cargo.toml", "rust-project.json"),
+            settings = {
+                ["rust-analyzer"] = {
+                    cargo = {
+                        allFeatures = true,
+                    },
+                    checkOnSave = {
+                        command = "clippy",
+                    },
+                    inlayHints = {
+                        parameterHints = { enable = true },
+                        typeHints = { enable = true },
                     },
                 },
             },
