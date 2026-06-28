@@ -128,5 +128,16 @@ return {
             },
         })
 
+        -- CMake LSP setup (cmake-language-server)
+        lspconfig.cmake.setup({
+            capabilities = capabilities,
+            on_attach = on_attach,
+            filetypes = { "cmake" },
+            root_dir = lspconfig.util.root_pattern("CMakeLists.txt", "cmake", ".git"),
+            init_options = {
+                buildDirectory = "build",
+            },
+        })
+
     end,
 }
