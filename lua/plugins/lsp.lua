@@ -15,81 +15,81 @@ return {
                 "clangd", "cmake", "omnisharp", "pyright", "rust_analyzer"
             },
             automatic_installation = true,
+            -- mason-lspconfig 2.x auto-runs vim.lsp.enable() for installed servers
         })
 
-        local lspconfig = require("lspconfig")
         local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-        -- Define on_attach ONCE to use for all servers
-        local on_attach = function(client, bufnr)
-            local opts = { buffer = bufnr }
-            local keymap = vim.keymap.set
-            keymap("n", "gd", vim.lsp.buf.definition, opts)
-            keymap("n", "K", vim.lsp.buf.hover, opts)
-            keymap("n", "<leader>rn", vim.lsp.buf.rename, opts)
-            keymap("n", "<leader>ca", vim.lsp.buf.code_action, opts)
-            keymap("n", "<leader>gr", vim.lsp.buf.references, opts)
-            keymap("i", "<C-s>", function() vim.lsp.buf.signature_help() end, opts)
-            keymap("n", "[d", vim.diagnostic.goto_prev, opts)
-            keymap("n", "]d", vim.diagnostic.goto_next, opts)
-        end
+        -- keymaps + per-client tweaks, applied to every attached server
+        vim.api.nvim_create_autocmd("LspAttach", {
+            callback = function(args)
+                local bufnr = args.buf
+                local opts = { buffer = bufnr }
+                local keymap = vim.keymap.set
+                keymap("n", "gd", vim.lsp.buf.definition, opts)
+                keymap("n", "K", vim.lsp.buf.hover, opts)
+                keymap("n", "<leader>rn", vim.lsp.buf.rename, opts)
+                keymap("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+                keymap("n", "<leader>gr", vim.lsp.buf.references, opts)
+                keymap("i", "<C-s>", function() vim.lsp.buf.signature_help() end, opts)
+                keymap("n", "[d", vim.diagnostic.goto_prev, opts)
+                keymap("n", "]d", vim.diagnostic.goto_next, opts)
+
+                local client = vim.lsp.get_client_by_id(args.data.client_id)
+                if client and client.name == "rust_analyzer" and vim.lsp.inlay_hint then
+                    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+                end
+            end,
+        })
+
+        -- merged into every server config (nvim 0.11 native API)
+        vim.lsp.config("*", {
+            capabilities = capabilities,
+        })
 
         -- C++ LSP setup
-        lspconfig.clangd.setup({
+        vim.lsp.config("clangd", {
             cmd = { "clangd",
                 "--background-index",
                 "--clang-tidy",
                 "--completion-style=detailed",
-                "--header-insertion=iwyu"},
+                "--header-insertion=iwyu" },
             filetypes = { "c", "cpp", "objc", "objcpp" },
-            root_dir = lspconfig.util.root_pattern("compile_commands.json", "compile_flags.txt", ".git"),
-            capabilities = capabilities,
-            on_attach = on_attach,
+            root_markers = { "compile_commands.json", "compile_flags.txt", ".git" },
         })
 
         -- C# LSP setup (OmniSharp via Mason for Linux/WSL)
-        lspconfig.omnisharp.setup({
-            capabilities = capabilities,
-            on_attach = on_attach,
-            root_dir = lspconfig.util.root_pattern("*.sln", "*.csproj"),
+        vim.lsp.config("omnisharp", {
             cmd = {
                 vim.fn.stdpath("data") .. "/mason/packages/omnisharp/OmniSharp",
                 "-lsp",
             },
-
-            enable_roslyn_analyzers = false,
-            organize_imports_on_format = true,
-            enable_import_completion = true,
-
+            root_markers = { "*.sln", "*.csproj" },
             settings = {
                 FormattingOptions = {
                     EnableEditorConfigSupport = true,
                     OrganizeImports = true,
                 },
-
                 MsBuild = {
                     LoadProjectsOnDemand = true,
                 },
-
                 RoslynExtensionsOptions = {
                     EnableAnalyzersSupport = false,
                     EnableImportCompletion = true,
                     EnableDecompilationSupport = true,
                 },
-            }
+            },
         })
 
         -- Python LSP setup (Pyright)
-        lspconfig.pyright.setup({
-            capabilities = capabilities,
-            on_attach = on_attach,
-            root_dir = lspconfig.util.root_pattern(
+        vim.lsp.config("pyright", {
+            root_markers = {
                 "pyproject.toml",
                 "setup.py",
                 "setup.cfg",
                 "requirements.txt",
-                ".git"
-            ),
+                ".git",
+            },
             settings = {
                 python = {
                     analysis = {
@@ -102,16 +102,9 @@ return {
         })
 
         -- Rust LSP setup (rust-analyzer)
-        lspconfig.rust_analyzer.setup({
-            capabilities = capabilities,
-            on_attach = function(client, bufnr)
-                on_attach(client, bufnr)
-                if vim.lsp.inlay_hint then
-                    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-                end
-            end,
+        vim.lsp.config("rust_analyzer", {
             filetypes = { "rust" },
-            root_dir = lspconfig.util.root_pattern("Cargo.toml", "rust-project.json"),
+            root_markers = { "Cargo.toml", "rust-project.json" },
             settings = {
                 ["rust-analyzer"] = {
                     cargo = {
@@ -129,15 +122,16 @@ return {
         })
 
         -- CMake LSP setup (cmake-language-server)
-        lspconfig.cmake.setup({
-            capabilities = capabilities,
-            on_attach = on_attach,
+        vim.lsp.config("cmake", {
             filetypes = { "cmake" },
-            root_dir = lspconfig.util.root_pattern("CMakeLists.txt", "cmake", ".git"),
+            root_markers = { "CMakeLists.txt", "cmake", ".git" },
             init_options = {
                 buildDirectory = "build",
             },
         })
 
+        -- ensure the servers we configured are turned on (idempotent with
+        -- mason-lspconfig's automatic_enable)
+        vim.lsp.enable({ "clangd", "omnisharp", "pyright", "rust_analyzer", "cmake" })
     end,
 }
